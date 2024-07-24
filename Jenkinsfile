@@ -18,11 +18,34 @@ pipeline {
                 echo "Inicializando o pipeline...."
             }
         }
-    }
-    stages {
+
         stage("Run Image") {
-            script {
-                docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").run("-p ${HOST_PORT}:${CONTAINER_PORT}")
+            steps {
+                script {
+                    docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").run("-p ${HOST_PORT}:${CONTAINER_PORT}")
+                }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+            script {
+                // Comandos de limpeza do Docker
+                try {
+                    sh 'docker container prune -f'
+                    sh 'docker image prune -f'
+                } catch (Exception e) {
+                    echo "Falha ao limpar: ${e}"
+                }
+            }
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
     }
 }
