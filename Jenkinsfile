@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Construa a imagem Docker
-                    docker.build("nodejenkins", "-f ./src/Dockerfile ./src")
+                    docker.build("nodejenkins", "-f Dockerfile .")
                 }
                 echo "Inicializando o pipeline...."
             }
