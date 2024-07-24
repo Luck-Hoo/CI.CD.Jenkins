@@ -53,14 +53,6 @@ pipeline {
                         echo "Falha ao parar o container: ${e}"
                     }
                 }
-
-                // Comandos de limpeza do Docker
-                try {
-                    bat 'docker container prune -f'
-                    bat 'docker image prune -f'
-                } catch (Exception e) {
-                    echo "Falha ao limpar: ${e}"
-                }
             }
         }
         success {
